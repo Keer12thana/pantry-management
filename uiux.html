@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pantry Management System Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F0F8FF;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        header {
+            background-color: #4682B4;
+            width: 100%;
+            padding: 20px;
+            color: white;
+            text-align: center;
+        }
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 20px;
+            width: 100%;
+        }
+        .dashboard-section {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        .dashboard-section h2 {
+            color: #4682B4;
+            margin-bottom: 10px;
+        }
+        button {
+            background-color: #2E8B57;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .delete-btn {
+            background-color: #ff6f6f;
+            margin-left: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        table th, table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        table th {
+            background-color: #4682B4;
+            color: white;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group select, .form-group input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .total-price {
+            text-align: right;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        #recipe-suggestions ul {
+            padding-left: 20px;
+            list-style: disc;
+        }
+        #notifications ul {
+            padding-left: 20px;
+            list-style: disc;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Pantry Management System</h1>
+    </header>
+    <div class="dashboard">
+        <!-- Inventory Tracking Dashboard -->
+        <section class="dashboard-section" id="inventory-section">
+            <h2>Inventory Tracking</h2>
+            <form id="add-item-form">
+                <div class="form-group">
+                    <label for="item-name">Item Name:</label>
+                    <select id="item-name" required>
+                        <!-- Vegetables -->
+                        <option value="Tomatoes">Tomatoes (kg)</option>
+                        <option value="Potatoes">Potatoes (kg)</option>
+                        <option value="Carrots">Carrots (kg)</option>
+                        <option value="Onions">Onions (kg)</option>
+                        <option value="Broccoli">Broccoli (kg)</option>
+                        <option value="Spinach">Spinach (kg)</option>
+                        <option value="Peppers">Peppers (kg)</option>
+                        <option value="Cabbage">Cabbage (kg)</option>
+                        <option value="Lettuce">Lettuce (units)</option>
+
+                        <!-- Fruits -->
+                        <option value="Apples">Apples (kg)</option>
+                        <option value="Bananas">Bananas (dozens)</option>
+                        <option value="Oranges">Oranges (dozens)</option>
+                        <option value="Grapes">Grapes (kg)</option>
+                        <option value="Berries">Berries (kg)</option>
+                        <option value="Lemons">Lemons (dozens)</option>
+                        <option value="Peaches">Peaches (kg)</option>
+                        <option value="Pears">Pears (kg)</option>
+                        <option value="Cherries">Cherries (kg)</option>
+
+                        <!-- Dairy -->
+                        <option value="Milk">Milk (liters)</option>
+                        <option value="Cheese">Cheese (kg)</option>
+                        <option value="Butter">Butter (kg)</option>
+                        <option value="Yogurt">Yogurt (liters)</option>
+                        <option value="Cream">Cream (liters)</option>
+                        <option value="Eggs">Eggs (dozens)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="item-quantity">Quantity:</label>
+                    <input type="number" id="item-quantity" required>
+                </div>
+                <button type="submit">Add Item</button>
+            </form>
+            <table id="inventory-table">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Quantity</th>
+                        <th>Expiry Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Items will be added here dynamically -->
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Recipe Suggestions Dashboard -->
+        <section class="dashboard-section" id="recipe-section">
+            <h2>Recipe Suggestions</h2>
+            <ul id="recipe-suggestions">
+                <!-- Recipe suggestions will be added here dynamically -->
+            </ul>
+        </section>
+
+        <!-- Shopping List Dashboard -->
+        <section class="dashboard-section" id="shopping-list-section">
+            <h2>Shopping List</h2>
+            <button id="generate-shopping-list">Generate Shopping List</button>
+            <div id="search-container" style="display: none;">
+                <div class="form-group">
+                    <label for="search-bar">Search for Items:</label>
+                    <input type="text" id="search-bar" placeholder="Search items...">
+                </div>
+            </div>
+            <table id="shopping-list-table">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Shopping list items will be added here dynamically -->
+                </tbody>
+            </table>
+            <div class="total-price" id="total-price">Total Price: $0.00</div>
+        </section>
+
+        <!-- Notifications Dashboard -->
+        <section class="dashboard-section" id="notifications-section">
+            <h2>Notifications</h2>
+            <ul id="notifications">
+                <!-- Notifications for low stock and expiring items will be added here -->
+            </ul>
+        </section>
+    </div>
+
+    <script>
+        let inventory = [];
+        let shoppingList = [];
+
+        const expiryDates = {
+            "Tomatoes": 7,
+            "Potatoes": 30,
+            "Carrots": 14,
+            "Onions": 30,
+            "Broccoli": 7,
+            "Spinach": 5,
+            "Peppers": 10,
+            "Cabbage": 21,
+            "Lettuce": 7,
+            "Apples": 21,
+            "Bananas": 7,
+            "Oranges": 14,
+            "Grapes": 14,
+            "Berries": 5,
+            "Lemons": 30,
+            "Peaches": 10,
+            "Pears": 14,
+            "Cherries": 7,
+            "Milk": 7,
+            "Cheese": 30,
+            "Butter": 60,
+            "Yogurt": 14,
+            "Cream": 10,
+            "Eggs": 30
+        };
+
+        const units = {
+            "Tomatoes": "kg",
+            "Potatoes": "kg",
+            "Carrots": "kg",
+            "Onions": "kg",
+            "Broccoli": "kg",
+            "Spinach": "kg",
+            "Peppers": "kg",
+            "Cabbage": "kg",
+            "Lettuce": "units",
+            "Apples": "kg",
+            "Bananas": "dozens",
+            "Oranges": "dozens",
+            "Grapes": "kg",
+            "Berries": "kg",
+            "Lemons": "dozens",
+            "Peaches": "kg",
+            "Pears": "kg",
+            "Cherries": "kg",
+            "Milk": "liters",
+            "Cheese": "kg",
+            "Butter": "kg",
+            "Yogurt": "liters",
+            "Cream": "liters",
+            "Eggs": "dozens"
+        };
+
+        const prices = {
+            "Tomatoes": 3.00,
+            "Potatoes": 1.50,
+            "Carrots": 2.00,
+            "Onions": 1.20,
+            "Broccoli": 2.50,
+            "Spinach": 2.00,
+            "Peppers": 2.50,
+            "Cabbage": 1.80,
+            "Lettuce": 1.00,
+            "Apples": 3.00,
+            "Bananas": 0.50,
+            "Oranges": 1.00,
+            "Grapes": 4.00,
+            "Berries": 5.00,
+            "Lemons": 0.75,
+            "Peaches": 3.50,
+            "Pears": 3.00,
+            "Cherries": 4.50,
+            "Milk": 1.00,
+            "Cheese": 5.00,
+            "Butter": 4.00,
+            "Yogurt": 1.50,
+            "Cream": 2.50,
+            "Eggs": 2.00
+        };
+
+        const recipes = {
+            "Tomato Soup": ["Tomatoes", "Onions", "Garlic"],
+            "Vegetable Stir Fry": ["Carrots", "Broccoli", "Peppers"],
+            "Fruit Salad": ["Apples", "Bananas", "Berries"],
+            "Creamy Mushroom Soup": ["Cream", "Onions"],
+            "Garlic Butter Shrimp": ["Butter", "Garlic"],
+            "Egg and Cheese Sandwich": ["Eggs", "Cheese", "Bread"],
+            "Peach Smoothie": ["Peaches", "Yogurt"],
+            "Lemonade": ["Lemons", "Sugar"],
+            "Berry Muffins": ["Berries", "Flour", "Eggs"]
+        };
+
+        document.getElementById('add-item-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const itemName = document.getElementById('item-name').value;
+            const itemQuantity = parseFloat(document.getElementById('item-quantity').value);
+            const itemPrice = prices[itemName];
+            const unit = units[itemName];
+
+            const expiryDate = new Date();
+            expiryDate.setDate(expiryDate.getDate() + expiryDates[itemName]);
+
+            const item = {
+                name: itemName,
+                quantity: itemQuantity,
+                expiryDate: expiryDate.toISOString().split('T')[0],
+                unit: unit,
+                price: itemPrice
+            };
+
+            inventory.push(item);
+            updateInventoryTable();
+            updateNotifications();
+            suggestRecipes();
+        });
+
+        function updateInventoryTable() {
+            const inventoryTable = document.getElementById('inventory-table').getElementsByTagName('tbody')[0];
+            inventoryTable.innerHTML = '';
+
+            inventory.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.name}</td>
+                    <td>${item.quantity} ${item.unit}</td>
+                    <td>${item.expiryDate}</td>
+                    <td>
+                        <button class="delete-btn" onclick="deleteItem(${index})">Delete</button>
+                        <button onclick="addToShoppingList(${index})">Add to Shopping List</button>
+                    </td>
+                `;
+                inventoryTable.appendChild(row);
+            });
+        }
+
+        function deleteItem(index) {
+            const deletedItem = inventory.splice(index, 1)[0];
+            shoppingList = shoppingList.filter(item => item.name !== deletedItem.name);
+            updateInventoryTable();
+            updateShoppingListTable();
+            updateNotifications();
+            suggestRecipes();
+        }
+
+        function addToShoppingList(index) {
+            const item = inventory[index];
+            shoppingList.push(item);
+            updateShoppingListTable();
+        }
+
+        function updateShoppingListTable() {
+            const shoppingListTable = document.getElementById('shopping-list-table').getElementsByTagName('tbody')[0];
+            shoppingListTable.innerHTML = '';
+
+            let totalPrice = 0;
+            shoppingList.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.name}</td>
+                    <td>${item.quantity} ${item.unit}</td>
+                    <td>$${(item.price * item.quantity).toFixed(2)}</td>
+                `;
+                shoppingListTable.appendChild(row);
+                totalPrice += item.price * item.quantity;
+            });
+
+            document.getElementById('total-price').textContent = `Total Price: $${totalPrice.toFixed(2)}`;
+        }
+
+        function updateNotifications() {
+            const notifications = document.getElementById('notifications');
+            notifications.innerHTML = '';
+
+            inventory.forEach(item => {
+                const today = new Date();
+                const expiryDate = new Date(item.expiryDate);
+
+                if (item.quantity <= 2) {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${item.name} is running low.`;
+                    notifications.appendChild(listItem);
+                }
+                if (expiryDate < today) {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${item.name} has expired.`;
+                    notifications.appendChild(listItem);
+                } else if (expiryDate <= new Date(today.getTime() + 3 * 24 * 60 * 60 * 1000)) {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${item.name} is expiring soon (${item.expiryDate})`;
+                    notifications.appendChild(listItem);
+                }
+            });
+        }
+
+        function suggestRecipes() {
+            const recipeSuggestions = document.getElementById('recipe-suggestions');
+            recipeSuggestions.innerHTML = '';
+
+            Object.keys(recipes).forEach(recipe => {
+                const ingredients = recipes[recipe];
+                if (ingredients.every(ingredient => inventory.some(item => item.name === ingredient && item.quantity > 0))) {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = recipe;
+                    recipeSuggestions.appendChild(listItem);
+                }
+            });
+        }
+
+        document.getElementById('generate-shopping-list').addEventListener('click', function() {
+            document.getElementById('search-container').style.display = 'block';
+        });
+
+        document.getElementById('search-bar').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const filteredItems = inventory.filter(item => item.name.toLowerCase().includes(searchTerm));
+            updateInventoryTable(filteredItems);
+        });
+    </script>
+</body>
+</html>
